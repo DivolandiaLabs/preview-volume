@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Polski](README.pl.md) · **Русский** · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Скачать:** [PreviewVolume-Setup.exe (последняя версия)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Скачать:** [PreviewVolume-Setup.exe (последняя версия)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![Регулятор громкости над миниатюрой](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ Windows разрешает добавлять кнопки в миниатюру
 ## Установка
 
 1. Скачайте **`PreviewVolume-Setup.exe`** со [страницы релизов](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
-2. Запустите его и нажмите **Instalar** («Установить»). Программа ставится только для вашего пользователя, в `%LOCALAPPDATA%\Programs\Preview Volume`, без прав администратора.
+2. Запустите его и нажмите **Установить**. Установщик открывается на языке Windows, язык можно сменить слева внизу (10 языков). Программа ставится только для вашего пользователя, в `%LOCALAPPDATA%\Programs\Preview Volume`, без прав администратора.
 3. Выберите, запускать ли её вместе с Windows и нужен ли ярлык на рабочем столе.
 
 ![Установщик](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Windows разрешает добавлять кнопки в миниатюру
 
 Удаление: **Параметры → Приложения → Установленные приложения → Preview Volume → Удалить**.
 
-Тихая установка: `PreviewVolume-Setup.exe /silencioso` (параметры: `/dir "папка"`, `/escritorio`, `/sininicio`, `/abrir`).
+Тихая установка: `PreviewVolume-Setup.exe /silencioso` (параметры: `/dir "папка"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma ru`).
 
 ## Использование
 
@@ -54,7 +54,7 @@ Windows разрешает добавлять кнопки в миниатюру
 
 - Windows 10 или 11 с .NET Framework 4.8 (уже входит в Windows).
 - Проверено в Windows 11 с классической панелью задач (в стиле Windows 10, например с ExplorerPatcher). Миниатюры новой панели задач Windows 11 могут работать иначе.
-- Интерфейс на испанском языке.
+- Установщик доступен на 10 языках; полоска и меню программы — на испанском.
 
 ## Сборка из исходного кода
 

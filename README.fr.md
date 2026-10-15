@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · **Français** · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Polski](README.pl.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Téléchargement :** [PreviewVolume-Setup.exe (dernière version)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Téléchargement :** [PreviewVolume-Setup.exe (dernière version)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![La barre de volume au-dessus de l'aperçu](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ C'est un tout petit programme (environ 40 Ko) qui se loge près de l'horloge, ne
 ## Installation
 
 1. Téléchargez **`PreviewVolume-Setup.exe`** depuis la [page des versions](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
-2. Lancez-le et cliquez sur **Instalar** (Installer). L'installation se fait pour votre utilisateur uniquement, dans `%LOCALAPPDATA%\Programs\Preview Volume`, sans droits d'administrateur.
+2. Lancez-le et cliquez sur **Installer**. Le programme d'installation s'ouvre dans la langue de Windows, modifiable en bas à gauche (10 langues). L'installation se fait pour votre utilisateur uniquement, dans `%LOCALAPPDATA%\Programs\Preview Volume`, sans droits d'administrateur.
 3. Choisissez s'il doit démarrer avec Windows et si vous voulez un raccourci sur le bureau.
 
 ![Programme d'installation](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Le programme n'est pas signé : la première fois, Windows SmartScreen peut affi
 
 Pour le désinstaller : **Paramètres → Applications → Applications installées → Preview Volume → Désinstaller**.
 
-Installation silencieuse : `PreviewVolume-Setup.exe /silencioso` (options : `/dir "dossier"`, `/escritorio`, `/sininicio`, `/abrir`).
+Installation silencieuse : `PreviewVolume-Setup.exe /silencioso` (options : `/dir "dossier"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma fr`).
 
 ## Utilisation
 
@@ -54,7 +54,7 @@ Installation silencieuse : `PreviewVolume-Setup.exe /silencioso` (options : `/di
 
 - Windows 10 ou 11 avec .NET Framework 4.8 (déjà inclus dans Windows).
 - Testé sous Windows 11 avec la barre des tâches classique (style Windows 10, par exemple avec ExplorerPatcher). L'aperçu de la nouvelle barre de Windows 11 peut fonctionner autrement.
-- L'interface est en espagnol.
+- Le programme d'installation existe en 10 langues ; la barre et le menu du programme sont en espagnol.
 
 ## Compiler depuis le code
 

@@ -4,7 +4,7 @@
 
 [Español](README.md) · **English** · [Português](README.pt.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Polski](README.pl.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Download:** [PreviewVolume-Setup.exe (latest release)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Download:** [PreviewVolume-Setup.exe (latest release)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![The volume bar on top of the preview](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ It is a tiny program (about 40 KB) that sits next to the clock, never goes onlin
 ## Installation
 
 1. Download **`PreviewVolume-Setup.exe`** from the [releases page](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
-2. Run it and click **Instalar** (Install). It installs for your user only, in `%LOCALAPPDATA%\Programs\Preview Volume`, with no administrator rights needed.
+2. Run it and click **Install**. The installer opens in your Windows language and can be switched at the bottom left (10 languages). It installs for your user only, in `%LOCALAPPDATA%\Programs\Preview Volume`, with no administrator rights needed.
 3. Choose whether it should start with Windows and whether you want a desktop shortcut.
 
 ![Installer](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ The program is not code-signed, so the first time Windows SmartScreen may warn y
 
 To uninstall: **Settings → Apps → Installed apps → Preview Volume → Uninstall**.
 
-Silent install: `PreviewVolume-Setup.exe /silencioso` (options: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`).
+Silent install: `PreviewVolume-Setup.exe /silencioso` (options: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma en`).
 
 ## Usage
 
@@ -54,7 +54,7 @@ Silent install: `PreviewVolume-Setup.exe /silencioso` (options: `/dir "folder"`,
 
 - Windows 10 or 11 with .NET Framework 4.8 (already part of Windows).
 - Tested on Windows 11 with the classic taskbar (Windows 10 style, e.g. with ExplorerPatcher). The preview of the new Windows 11 taskbar may behave differently.
-- The interface is in Spanish.
+- The installer comes in 10 languages; the bar and the program menu are in Spanish.
 
 ## Building from source
 

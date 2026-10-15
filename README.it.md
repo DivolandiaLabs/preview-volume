@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · **Italiano** · [Polski](README.pl.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Download:** [PreviewVolume-Setup.exe (ultima versione)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Download:** [PreviewVolume-Setup.exe (ultima versione)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![La barra del volume sopra l'anteprima](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ Windows permette solo all'app stessa di mettere pulsanti nella propria anteprima
 ## Installazione
 
 1. Scarica **`PreviewVolume-Setup.exe`** dalla [pagina delle versioni](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
-2. Aprilo e premi **Instalar** (Installa). Si installa solo per il tuo utente, in `%LOCALAPPDATA%\Programs\Preview Volume`, senza permessi di amministratore.
+2. Aprilo e premi **Installa**. Il programma di installazione si apre nella lingua di Windows e si può cambiare in basso a sinistra (10 lingue). Si installa solo per il tuo utente, in `%LOCALAPPDATA%\Programs\Preview Volume`, senza permessi di amministratore.
 3. Scegli se avviarlo con Windows e se vuoi un collegamento sul desktop.
 
 ![Programma di installazione](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Il programma non è firmato, quindi la prima volta Windows SmartScreen potrebbe 
 
 Per disinstallarlo: **Impostazioni → App → App installate → Preview Volume → Disinstalla**.
 
-Installazione silenziosa: `PreviewVolume-Setup.exe /silencioso` (opzioni: `/dir "cartella"`, `/escritorio`, `/sininicio`, `/abrir`).
+Installazione silenziosa: `PreviewVolume-Setup.exe /silencioso` (opzioni: `/dir "cartella"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma it`).
 
 ## Utilizzo
 
@@ -54,7 +54,7 @@ Installazione silenziosa: `PreviewVolume-Setup.exe /silencioso` (opzioni: `/dir 
 
 - Windows 10 o 11 con .NET Framework 4.8 (già incluso in Windows).
 - Provato su Windows 11 con la barra delle applicazioni classica (stile Windows 10, ad esempio con ExplorerPatcher). L'anteprima della nuova barra di Windows 11 potrebbe funzionare in modo diverso.
-- L'interfaccia è in spagnolo.
+- Il programma di installazione è in 10 lingue; la barra e il menu del programma sono in spagnolo.
 
 ## Compilare dal codice
 

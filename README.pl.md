@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · **Polski** · [Русский](README.ru.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Pobierz:** [PreviewVolume-Setup.exe (najnowsza wersja)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Pobierz:** [PreviewVolume-Setup.exe (najnowsza wersja)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![Pasek głośności nad podglądem](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ To malutki program (ok. 40 KB), który siedzi obok zegara, nigdy nie łączy si�
 ## Instalacja
 
 1. Pobierz **`PreviewVolume-Setup.exe`** ze [strony wydań](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
-2. Uruchom go i kliknij **Instalar** (Instaluj). Instaluje się tylko dla Twojego użytkownika, w `%LOCALAPPDATA%\Programs\Preview Volume`, bez uprawnień administratora.
+2. Uruchom go i kliknij **Instaluj**. Instalator otwiera się w języku Windows, a język można zmienić w lewym dolnym rogu (10 języków). Instaluje się tylko dla Twojego użytkownika, w `%LOCALAPPDATA%\Programs\Preview Volume`, bez uprawnień administratora.
 3. Wybierz, czy ma się uruchamiać z Windows i czy chcesz skrót na pulpicie.
 
 ![Instalator](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Program nie jest podpisany cyfrowo, więc przy pierwszym uruchomieniu Windows Sm
 
 Odinstalowanie: **Ustawienia → Aplikacje → Zainstalowane aplikacje → Preview Volume → Odinstaluj**.
 
-Instalacja cicha: `PreviewVolume-Setup.exe /silencioso` (opcje: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`).
+Instalacja cicha: `PreviewVolume-Setup.exe /silencioso` (opcje: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma pl`).
 
 ## Użycie
 
@@ -54,7 +54,7 @@ Instalacja cicha: `PreviewVolume-Setup.exe /silencioso` (opcje: `/dir "folder"`,
 
 - Windows 10 lub 11 z .NET Framework 4.8 (jest już w systemie).
 - Przetestowano w Windows 11 z klasycznym paskiem zadań (w stylu Windows 10, np. z ExplorerPatcher). Podgląd nowego paska Windows 11 może działać inaczej.
-- Interfejs jest po hiszpańsku.
+- Instalator jest dostępny w 10 językach; pasek i menu programu są po hiszpańsku.
 
 ## Kompilacja ze źródeł
 

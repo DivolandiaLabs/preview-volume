@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Polski](README.pl.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · **日本語**
 
-**ダウンロード:** [PreviewVolume-Setup.exe（最新版）](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **ダウンロード:** [PreviewVolume-Setup.exe（最新版）](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![プレビューの上の音量バー](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 ## インストール
 
 1. [リリースページ](https://github.com/DivolandiaLabs/preview-volume/releases/latest)から **`PreviewVolume-Setup.exe`** をダウンロードします。
-2. 起動して **Instalar**（インストール）を押します。現在のユーザーだけに `%LOCALAPPDATA%\Programs\Preview Volume` へインストールされ、管理者権限は不要です。
+2. 起動して **インストール** を押します。インストーラーは Windows の言語で開き、左下で切り替えられます（10 言語）。現在のユーザーだけに `%LOCALAPPDATA%\Programs\Preview Volume` へインストールされ、管理者権限は不要です。
 3. Windows と一緒に起動するか、デスクトップにショートカットを作るかを選びます。
 
 ![インストーラー](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 
 アンインストール：**設定 → アプリ → インストールされているアプリ → Preview Volume → アンインストール**。
 
-サイレントインストール：`PreviewVolume-Setup.exe /silencioso`（オプション：`/dir "フォルダー"`、`/escritorio`、`/sininicio`、`/abrir`）。
+サイレントインストール：`PreviewVolume-Setup.exe /silencioso`（オプション：`/dir "フォルダー"`、`/escritorio`、`/sininicio`、`/abrir`、`/idioma ja`）。
 
 ## 使い方
 
@@ -54,7 +54,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 
 - .NET Framework 4.8 を含む Windows 10 または 11（Windows に標準搭載）。
 - Windows 11 のクラシックなタスクバー（Windows 10 スタイル、例：ExplorerPatcher 使用時）で動作確認済み。Windows 11 の新しいタスクバーのプレビューでは動作が異なる場合があります。
-- 画面表示はスペイン語です。
+- インストーラーは 10 言語に対応。音量バーとプログラムのメニューはスペイン語です。
 
 ## ソースからのビルド
 

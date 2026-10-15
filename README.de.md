@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · [Français](README.fr.md) · **Deutsch** · [Italiano](README.it.md) · [Polski](README.pl.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Download:** [PreviewVolume-Setup.exe (neueste Version)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Download:** [PreviewVolume-Setup.exe (neueste Version)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![Der Lautstärkeregler über der Vorschau](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ Ein winziges Programm (rund 40 KB), das neben der Uhr sitzt, nie ins Internet ge
 ## Installation
 
 1. Laden Sie **`PreviewVolume-Setup.exe`** von der [Release-Seite](https://github.com/DivolandiaLabs/preview-volume/releases/latest) herunter.
-2. Starten Sie die Datei und klicken Sie auf **Instalar** (Installieren). Installiert wird nur für Ihr Benutzerkonto, in `%LOCALAPPDATA%\Programs\Preview Volume`, ohne Administratorrechte.
+2. Starten Sie die Datei und klicken Sie auf **Installieren**. Das Installationsprogramm öffnet sich in Ihrer Windows-Sprache und lässt sich unten links umstellen (10 Sprachen). Installiert wird nur für Ihr Benutzerkonto, in `%LOCALAPPDATA%\Programs\Preview Volume`, ohne Administratorrechte.
 3. Wählen Sie, ob das Programm mit Windows starten soll und ob Sie eine Desktopverknüpfung möchten.
 
 ![Installationsprogramm](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Das Programm ist nicht signiert, daher kann Windows SmartScreen beim ersten Mal 
 
 Deinstallieren: **Einstellungen → Apps → Installierte Apps → Preview Volume → Deinstallieren**.
 
-Stille Installation: `PreviewVolume-Setup.exe /silencioso` (Optionen: `/dir "Ordner"`, `/escritorio`, `/sininicio`, `/abrir`).
+Stille Installation: `PreviewVolume-Setup.exe /silencioso` (Optionen: `/dir "Ordner"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma de`).
 
 ## Verwendung
 
@@ -54,7 +54,7 @@ Stille Installation: `PreviewVolume-Setup.exe /silencioso` (Optionen: `/dir "Ord
 
 - Windows 10 oder 11 mit .NET Framework 4.8 (bereits in Windows enthalten).
 - Getestet unter Windows 11 mit der klassischen Taskleiste (im Stil von Windows 10, z. B. mit ExplorerPatcher). Die Vorschau der neuen Windows-11-Taskleiste kann sich anders verhalten.
-- Die Oberfläche ist auf Spanisch.
+- Das Installationsprogramm gibt es in 10 Sprachen; Leiste und Programmmenü sind auf Spanisch.
 
 ## Aus dem Quellcode bauen
 

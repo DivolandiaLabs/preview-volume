@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · **Português** · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Polski](README.pl.md) · [Русский](README.ru.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
-**Download:** [PreviewVolume-Setup.exe (versão mais recente)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **Download:** [PreviewVolume-Setup.exe (versão mais recente)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![A barra de volume acima da pré-visualização](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ O Windows só deixa o próprio aplicativo colocar botões na sua pré-visualiza�
 ## Instalação
 
 1. Baixe **`PreviewVolume-Setup.exe`** na [página de versões](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
-2. Abra e clique em **Instalar**. A instalação é só para o seu usuário, em `%LOCALAPPDATA%\Programs\Preview Volume`, sem pedir permissão de administrador.
+2. Abra e clique em **Instalar**. O instalador abre no idioma do Windows e pode ser trocado no canto inferior esquerdo (10 idiomas). A instalação é só para o seu usuário, em `%LOCALAPPDATA%\Programs\Preview Volume`, sem pedir permissão de administrador.
 3. Escolha se ele deve iniciar com o Windows e se você quer um atalho na área de trabalho.
 
 ![Instalador](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ O programa não é assinado digitalmente, então na primeira vez o Windows Smart
 
 Para desinstalar: **Configurações → Aplicativos → Aplicativos instalados → Preview Volume → Desinstalar**.
 
-Instalação silenciosa: `PreviewVolume-Setup.exe /silencioso` (opções: `/dir "pasta"`, `/escritorio`, `/sininicio`, `/abrir`).
+Instalação silenciosa: `PreviewVolume-Setup.exe /silencioso` (opções: `/dir "pasta"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma pt`).
 
 ## Uso
 
@@ -54,7 +54,7 @@ Instalação silenciosa: `PreviewVolume-Setup.exe /silencioso` (opções: `/dir 
 
 - Windows 10 ou 11 com .NET Framework 4.8 (já vem com o Windows).
 - Testado no Windows 11 com a barra de tarefas clássica (estilo Windows 10, por exemplo com o ExplorerPatcher). A pré-visualização da nova barra do Windows 11 pode funcionar de outra forma.
-- A interface está em espanhol.
+- O instalador está em 10 idiomas; a barra e o menu do programa estão em espanhol.
 
 ## Compilar a partir do código
 

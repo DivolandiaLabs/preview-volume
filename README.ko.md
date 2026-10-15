@@ -4,7 +4,7 @@
 
 [Español](README.md) · [English](README.en.md) · [Português](README.pt.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Polski](README.pl.md) · [Русский](README.ru.md) · **한국어** · [日本語](README.ja.md)
 
-**다운로드:** [PreviewVolume-Setup.exe (최신 버전)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
+**Web:** https://divolandialabs.github.io/preview-volume/ · **다운로드:** [PreviewVolume-Setup.exe (최신 버전)](https://github.com/DivolandiaLabs/preview-volume/releases/latest)
 
 ![미리 보기 위의 볼륨 바](docs/screenshots/preview-volume.png)
 
@@ -32,7 +32,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 ## 설치
 
 1. [릴리스 페이지](https://github.com/DivolandiaLabs/preview-volume/releases/latest)에서 **`PreviewVolume-Setup.exe`**를 내려받습니다.
-2. 실행한 뒤 **Instalar**(설치)를 누릅니다. 현재 사용자에게만 `%LOCALAPPDATA%\Programs\Preview Volume`에 설치되며 관리자 권한이 필요 없습니다.
+2. 실행한 뒤 **설치**를 누릅니다. 설치 프로그램은 Windows 언어로 열리며 왼쪽 아래에서 바꿀 수 있습니다(10개 언어). 현재 사용자에게만 `%LOCALAPPDATA%\Programs\Preview Volume`에 설치되며 관리자 권한이 필요 없습니다.
 3. Windows와 함께 시작할지, 바탕 화면 바로 가기를 만들지 선택합니다.
 
 ![설치 프로그램](docs/screenshots/instalador.png)
@@ -41,7 +41,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 
 제거: **설정 → 앱 → 설치된 앱 → Preview Volume → 제거**.
 
-자동 설치: `PreviewVolume-Setup.exe /silencioso` (옵션: `/dir "폴더"`, `/escritorio`, `/sininicio`, `/abrir`).
+자동 설치: `PreviewVolume-Setup.exe /silencioso` (옵션: `/dir "폴더"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma ko`).
 
 ## 사용법
 
@@ -54,7 +54,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 
 - .NET Framework 4.8이 포함된 Windows 10 또는 11(Windows에 기본 포함).
 - Windows 11의 클래식 작업 표시줄(Windows 10 스타일, 예: ExplorerPatcher 사용)에서 테스트했습니다. 새 Windows 11 작업 표시줄의 미리 보기는 다르게 동작할 수 있습니다.
-- 인터페이스는 스페인어입니다.
+- 설치 프로그램은 10개 언어를 지원하며, 볼륨 바와 프로그램 메뉴는 스페인어입니다.
 
 ## 소스에서 빌드
 
