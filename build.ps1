@@ -19,6 +19,6 @@ if ($LASTEXITCODE -ne 0) { throw "Error al compilar" }
 # Instalador: lleva dentro PreviewVolume.exe
 & $csc /nologo /target:winexe /optimize+ /platform:anycpu /codepage:65001 "/win32manifest:$here\instalador\instalador.manifest" "/win32icon:$here\app.ico" `
     /r:System.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll "/resource:$here\bin\PreviewVolume.exe,PreviewVolume.exe" `
-    "/out:$here\bin\PreviewVolume-Setup.exe" "$here\instalador\Instalador.cs"
+    "/out:$here\bin\PreviewVolume-Setup.exe" @(Get-ChildItem "$here\instalador\*.cs" | ForEach-Object { $_.FullName })
 if ($LASTEXITCODE -ne 0) { throw "Error al compilar el instalador" }
 Get-Item "$here\bin\*.exe" | Select-Object Name, Length

@@ -12,8 +12,8 @@ using Microsoft.Win32;
 [assembly: System.Reflection.AssemblyProduct("Preview Volume")]
 [assembly: System.Reflection.AssemblyCompany("Divolandia Labs")]
 [assembly: System.Reflection.AssemblyCopyright("© 2026 Divolandia Labs")]
-[assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.1.0.0")]
 
 namespace PreviewVolumeSetup
 {
@@ -21,7 +21,7 @@ namespace PreviewVolumeSetup
     static class Programa
     {
         public const string Nombre = "Preview Volume";
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
         public const string Exe = "PreviewVolume.exe";
         public const string ClaveDesinstalar = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\PreviewVolume";
         public const string ClaveInicio = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -43,6 +43,7 @@ namespace PreviewVolumeSetup
                 else if (a == "/sininicio") inicio = false;
                 else if (a == "/abrir") abrir = true;
                 else if (a == "/dir" && i + 1 < args.Length) dir = args[++i];
+                else if (a == "/idioma" && i + 1 < args.Length) { int n = Array.IndexOf(L.Codigos, args[++i].ToLowerInvariant()); if (n >= 0) L.Actual = n; }
             }
             if (desinstalar)
             {
@@ -128,15 +129,15 @@ namespace PreviewVolumeSetup
         public static void Instalar(string dir, bool escritorio, bool inicio, Action<string, int> progreso)
         {
             Action<string, int> P = (t, n) => { if (progreso != null) progreso(t, n); };
-            P("Preparando la carpeta…", 5);
+            P(L.T("Preparando la carpeta…"), 5);
             Directory.CreateDirectory(dir);
-            P("Cerrando " + Programa.Nombre + " si está abierto…", 12);
+            P(L.F("Cerrando {0} si está abierto…", Programa.Nombre), 12);
             CerrarPrograma();
-            P("Copiando " + Programa.Exe + "…", 25);
+            P(L.F("Copiando {0}…", Programa.Exe), 25);
             string exe = Path.Combine(dir, Programa.Exe);
             using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(Programa.Exe))
             {
-                if (s == null) throw new InvalidOperationException("El instalador está dañado: no contiene " + Programa.Exe);
+                if (s == null) throw new InvalidOperationException(L.F("El instalador está dañado: no contiene {0}", Programa.Exe));
                 string tmp = exe + ".nuevo";
                 using (var f = File.Create(tmp)) s.CopyTo(f);
                 if (File.Exists(exe)) File.Delete(exe);
@@ -146,17 +147,17 @@ namespace PreviewVolumeSetup
             string cfg = Path.Combine(dir, "config.ini");
             if (!File.Exists(cfg)) File.WriteAllText(cfg, "todas=0\r\n");
 
-            P("Creando el desinstalador…", 45);
+            P(L.T("Creando el desinstalador…"), 45);
             string desinst = Path.Combine(dir, "Desinstalar.exe");
             if (!string.Equals(Application.ExecutablePath, desinst, StringComparison.OrdinalIgnoreCase)) File.Copy(Application.ExecutablePath, desinst, true);
 
-            P("Creando accesos directos…", 60);
-            const string desc = "Barra de volumen en la vista previa de la barra de tareas";
+            P(L.T("Creando accesos directos…"), 60);
+            string desc = L.T("Barra de volumen en la vista previa de la barra de tareas");
             Acceso(AccesoMenuInicio, exe, desc);
             if (escritorio) Acceso(AccesoEscritorio, exe, desc);
             else if (File.Exists(AccesoEscritorio)) File.Delete(AccesoEscritorio);
 
-            P("Registrando en Windows…", 80);
+            P(L.T("Registrando en Windows…"), 80);
             using (var k = Registry.CurrentUser.CreateSubKey(Programa.ClaveInicio))
                 if (inicio) k.SetValue(Programa.ValorInicio, "\"" + exe + "\"");
                 else k.DeleteValue(Programa.ValorInicio, false);
@@ -175,9 +176,9 @@ namespace PreviewVolumeSetup
                 k.SetValue("EstimatedSize", (int)((new FileInfo(exe).Length + new FileInfo(desinst).Length) / 1024), RegistryValueKind.DWord);
                 k.SetValue("InstallDate", DateTime.Now.ToString("yyyyMMdd"));
             }
-            P("Actualizando los iconos de Windows…", 95);
+            P(L.T("Actualizando los iconos de Windows…"), 95);
             try { SHChangeNotify(0x08000000, 0, IntPtr.Zero, IntPtr.Zero); } catch { }
-            P("Listo", 100);
+            P(L.T("Listo"), 100);
         }
 
         [System.Runtime.InteropServices.DllImport("shell32.dll")]
@@ -186,12 +187,12 @@ namespace PreviewVolumeSetup
         public static void Desinstalar(string dir, Action<string, int> progreso)
         {
             Action<string, int> P = (t, n) => { if (progreso != null) progreso(t, n); };
-            P("Cerrando " + Programa.Nombre + "…", 10);
+            P(L.F("Cerrando {0}…", Programa.Nombre), 10);
             CerrarPrograma();
-            P("Quitando accesos directos…", 30);
+            P(L.T("Quitando accesos directos…"), 30);
             try { if (File.Exists(AccesoMenuInicio)) File.Delete(AccesoMenuInicio); } catch { }
             try { if (File.Exists(AccesoEscritorio)) File.Delete(AccesoEscritorio); } catch { }
-            P("Quitando el registro…", 50);
+            P(L.T("Quitando el registro…"), 50);
             try { Registry.CurrentUser.DeleteSubKeyTree(Programa.ClaveDesinstalar, false); } catch { }
             try
             {
@@ -199,7 +200,7 @@ namespace PreviewVolumeSetup
                     if (k != null) k.DeleteValue(Programa.ValorInicio, false);
             }
             catch { }
-            P("Borrando archivos…", 70);
+            P(L.T("Borrando archivos…"), 70);
             for (int i = 0; i < 10; i++)
             {
                 try
@@ -214,7 +215,7 @@ namespace PreviewVolumeSetup
                 }
                 catch { Thread.Sleep(500); }
             }
-            P("Listo", 100);
+            P(L.T("Listo"), 100);
         }
 
         static void Acceso(string lnk, string destino, string descripcion)
@@ -286,33 +287,57 @@ namespace PreviewVolumeSetup
         TextBox carpeta;
         CheckBox escritorio, inicio, abrir;
         ProgressBar barra;
-        Label estado;
+        Label aviso, estado, etiquetaIdioma;
+        ComboBox idioma;
         Button instalar, cancelar, examinar;
-        bool terminado;
+        readonly bool actualizar;
+        bool terminado, ocupado;
 
-        public VentanaInstalar(string dir) : base("Instalar " + Programa.Nombre, "Versión " + Programa.Version + " · Divolandia Labs")
+        public VentanaInstalar(string dir) : base("", "")
         {
-            bool actualizar = Instalacion.CarpetaInstalada() != null;
-            var l = new Label { Text = actualizar ? "Ya está instalado: se actualizará en la misma carpeta." : "Carpeta de instalación (solo para tu usuario, no hace falta ser administrador):", Location = new Point(S(24), S(116)), Size = new Size(S(512), S(22)) };
-            carpeta = new TextBox { Text = dir, Location = new Point(S(24), S(142)), Width = S(410) };
-            examinar = new Button { Text = "Examinar…", Location = new Point(S(442), S(140)), Size = new Size(S(94), S(28)), FlatStyle = FlatStyle.Flat };
+            actualizar = Instalacion.CarpetaInstalada() != null;
+            aviso = new Label { Location = new Point(S(24), S(116)), Size = new Size(S(512), S(22)) };
+            carpeta = new TextBox { Text = dir, Location = new Point(S(24), S(142)), Width = S(400) };
+            examinar = new Button { Location = new Point(S(432), S(140)), Size = new Size(S(104), S(28)), FlatStyle = FlatStyle.Flat };
             examinar.Click += (s, e) =>
             {
                 using (var d = new FolderBrowserDialog { SelectedPath = carpeta.Text })
                     if (d.ShowDialog(this) == DialogResult.OK)
                         carpeta.Text = d.SelectedPath.EndsWith(Programa.Nombre, StringComparison.OrdinalIgnoreCase) ? d.SelectedPath : Path.Combine(d.SelectedPath, Programa.Nombre);
             };
-            inicio = new CheckBox { Text = "Iniciar " + Programa.Nombre + " con Windows", Checked = true, Location = new Point(S(24), S(186)), AutoSize = true };
-            escritorio = new CheckBox { Text = "Crear acceso directo en el escritorio", Checked = false, Location = new Point(S(24), S(214)), AutoSize = true };
-            abrir = new CheckBox { Text = "Abrir " + Programa.Nombre + " al terminar", Checked = true, Location = new Point(S(24), S(242)), AutoSize = true };
-            barra = new ProgressBar { Location = new Point(S(24), S(284)), Size = new Size(S(512), S(10)), Visible = false };
-            estado = new Label { Location = new Point(S(24), S(300)), Size = new Size(S(512), S(22)), ForeColor = Color.DimGray };
-            Controls.AddRange(new Control[] { l, carpeta, examinar, inicio, escritorio, abrir, barra, estado });
-            instalar = Boton(actualizar ? "Actualizar" : "Instalar", 308, 334, true);
-            cancelar = Boton("Cancelar", 426, 334, false);
+            inicio = new CheckBox { Checked = true, Location = new Point(S(24), S(186)), AutoSize = true };
+            escritorio = new CheckBox { Checked = false, Location = new Point(S(24), S(214)), AutoSize = true };
+            abrir = new CheckBox { Checked = true, Location = new Point(S(24), S(242)), AutoSize = true };
+            barra = new ProgressBar { Location = new Point(S(24), S(280)), Size = new Size(S(512), S(10)), Visible = false };
+            estado = new Label { Location = new Point(S(24), S(294)), Size = new Size(S(512), S(36)), ForeColor = Color.DimGray };
+            etiquetaIdioma = new Label { Location = new Point(S(24), S(341)), AutoSize = true, ForeColor = Color.DimGray };
+            idioma = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(S(96), S(338)), Width = S(130) };
+            idioma.Items.AddRange(L.Nombres);
+            idioma.SelectedIndex = L.Actual;
+            idioma.SelectedIndexChanged += (s, e) => { L.Actual = idioma.SelectedIndex; Textos(); };
+            Controls.AddRange(new Control[] { aviso, carpeta, examinar, inicio, escritorio, abrir, barra, estado, etiquetaIdioma, idioma });
+            instalar = Boton("", 308, 334, true);
+            cancelar = Boton("", 426, 334, false);
             instalar.Click += (s, e) => Instalar();
             cancelar.Click += (s, e) => Close();
             AcceptButton = instalar;
+            Textos();
+        }
+
+        // Pone todos los textos en el idioma elegido (se llama otra vez al cambiar de idioma).
+        void Textos()
+        {
+            Text = titulo.Text = L.F("Instalar {0}", Programa.Nombre);
+            subtitulo.Text = L.F("Versión {0} · Divolandia Labs", Programa.Version);
+            aviso.Text = actualizar ? L.T("Ya está instalado: se actualizará en la misma carpeta.") : L.T("Carpeta de instalación (solo para tu usuario, sin permisos de administrador):");
+            examinar.Text = L.T("Examinar…");
+            inicio.Text = L.F("Iniciar {0} con Windows", Programa.Nombre);
+            escritorio.Text = L.T("Crear acceso directo en el escritorio");
+            abrir.Text = L.F("Abrir {0} al terminar", Programa.Nombre);
+            etiquetaIdioma.Text = L.T("Idioma");
+            instalar.Text = terminado ? L.T("Finalizar") : actualizar ? L.T("Actualizar") : L.T("Instalar");
+            cancelar.Text = L.T("Cancelar");
+            if (terminado) estado.Text = L.T("Instalado. Está junto al reloj: pasa el ratón por el icono de Spotify.");
         }
 
         void Instalar()
@@ -323,9 +348,11 @@ namespace PreviewVolumeSetup
                 Close();
                 return;
             }
+            if (ocupado) return;
             string dir = carpeta.Text.Trim();
-            if (dir.Length < 4) { MessageBox.Show(this, "Elige una carpeta válida.", Text); return; }
-            instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = false;
+            if (dir.Length < 4) { MessageBox.Show(this, L.T("Elige una carpeta válida."), Text); return; }
+            ocupado = true;
+            instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = idioma.Enabled = false;
             barra.Visible = true;
             bool esc = escritorio.Checked, ini = inicio.Checked;
             var hilo = new Thread(() =>
@@ -335,22 +362,22 @@ namespace PreviewVolumeSetup
                 {
                     Instalacion.Instalar(dir, esc, ini, (t, n) => BeginInvoke((Action)(() => { estado.Text = t; barra.Value = n; })));
                 }
-                catch (UnauthorizedAccessException) { error = "No hay permiso para escribir en esa carpeta. Elige otra (por ejemplo la propuesta por defecto)."; }
+                catch (UnauthorizedAccessException) { error = L.T("No hay permiso para escribir en esa carpeta. Elige otra (por ejemplo, la propuesta)."); }
                 catch (Exception ex) { error = ex.Message; }
                 BeginInvoke((Action)(() =>
                 {
+                    ocupado = false;
                     if (error != null)
                     {
-                        MessageBox.Show(this, "No se pudo instalar:\n\n" + error, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = true;
+                        MessageBox.Show(this, L.T("No se pudo instalar:") + "\n\n" + error, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = idioma.Enabled = true;
                         barra.Visible = false; estado.Text = "";
                         return;
                     }
                     terminado = true;
-                    estado.Text = "Instalado. Queda junto al reloj; pasa el ratón por el icono de Spotify.";
                     estado.ForeColor = Color.FromArgb(20, 130, 50);
-                    instalar.Text = "Finalizar";
-                    instalar.Enabled = true;
+                    Textos();
+                    instalar.Enabled = idioma.Enabled = true;
                 }));
             });
             hilo.IsBackground = true;
@@ -360,14 +387,14 @@ namespace PreviewVolumeSetup
 
     class VentanaDesinstalar : Base
     {
-        public VentanaDesinstalar(string dir) : base("Desinstalar " + Programa.Nombre, "Se quitará el programa, sus accesos directos y su registro")
+        public VentanaDesinstalar(string dir) : base(L.F("Desinstalar {0}", Programa.Nombre), L.T("Se quitará el programa, sus accesos directos y su registro"))
         {
-            var l = new Label { Text = "Carpeta: " + dir, Location = new Point(S(24), S(120)), Size = new Size(S(512), S(40)) };
+            var l = new Label { Text = L.F("Carpeta: {0}", dir), Location = new Point(S(24), S(120)), Size = new Size(S(512), S(40)) };
             var barra = new ProgressBar { Location = new Point(S(24), S(220)), Size = new Size(S(512), S(10)), Visible = false };
             var estado = new Label { Location = new Point(S(24), S(238)), Size = new Size(S(512), S(22)), ForeColor = Color.DimGray };
             Controls.AddRange(new Control[] { l, barra, estado });
-            var si = Boton("Desinstalar", 308, 334, true);
-            var no = Boton("Cancelar", 426, 334, false);
+            var si = Boton(L.T("Desinstalar"), 308, 334, true);
+            var no = Boton(L.T("Cancelar"), 426, 334, false);
             bool hecho = false;
             no.Click += (s, e) => Close();
             si.Click += (s, e) =>
@@ -381,8 +408,8 @@ namespace PreviewVolumeSetup
                     BeginInvoke((Action)(() =>
                     {
                         hecho = true;
-                        estado.Text = Programa.Nombre + " se ha desinstalado.";
-                        si.Text = "Cerrar"; si.Enabled = true;
+                        estado.Text = L.F("{0} se ha desinstalado.", Programa.Nombre);
+                        si.Text = L.T("Cerrar"); si.Enabled = true;
                     }));
                 });
                 hilo.IsBackground = true;
