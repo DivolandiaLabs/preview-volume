@@ -4,7 +4,10 @@ $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $csc = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 $common = @('/nologo', '/target:winexe', '/optimize+', '/platform:anycpu', '/codepage:65001',
-            "/win32manifest:$here\app.manifest", '/r:System.Drawing.dll', '/r:System.Windows.Forms.dll', '/r:Accessibility.dll')
+            "/win32manifest:$here\app.manifest", '/r:System.Drawing.dll', '/r:System.Windows.Forms.dll', '/r:Accessibility.dll',
+            "/r:$(Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\WPF\WindowsBase.dll')",
+            "/r:$((Get-ChildItem "$env:WINDIR\Microsoft.NET\assembly\GAC_MSIL\UIAutomationClient" -Recurse -Filter UIAutomationClient.dll)[0].FullName)",
+            "/r:$((Get-ChildItem "$env:WINDIR\Microsoft.NET\assembly\GAC_MSIL\UIAutomationTypes" -Recurse -Filter UIAutomationTypes.dll)[0].FullName)")
 
 $tmp = Join-Path $here 'PreviewVolume_icono.exe'
 & $csc @common "/out:$tmp" "$here\PreviewVolume.cs"

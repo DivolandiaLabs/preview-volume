@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -12,8 +14,8 @@ using Microsoft.Win32;
 [assembly: System.Reflection.AssemblyProduct("Preview Volume")]
 [assembly: System.Reflection.AssemblyCompany("Divolandia Labs")]
 [assembly: System.Reflection.AssemblyCopyright("© 2026 Divolandia Labs")]
-[assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.1.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.2.0.0")]
 
 namespace PreviewVolumeSetup
 {
@@ -21,7 +23,7 @@ namespace PreviewVolumeSetup
     static class Programa
     {
         public const string Nombre = "Preview Volume";
-        public const string Version = "1.1.0";
+        public const string Version = "1.2.0";
         public const string Exe = "PreviewVolume.exe";
         public const string ClaveDesinstalar = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\PreviewVolume";
         public const string ClaveInicio = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -33,6 +35,7 @@ namespace PreviewVolumeSetup
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             bool desinstalar = false, silencioso = false, escritorio = false, inicio = true, abrir = false;
+            bool? barra11 = null;
             string dir = null;
             for (int i = 0; i < args.Length; i++)
             {
@@ -42,6 +45,8 @@ namespace PreviewVolumeSetup
                 else if (a == "/escritorio") escritorio = true;
                 else if (a == "/sininicio") inicio = false;
                 else if (a == "/abrir") abrir = true;
+                else if (a == "/barra10") barra11 = false;
+                else if (a == "/barra11") barra11 = true;
                 else if (a == "/dir" && i + 1 < args.Length) dir = args[++i];
                 else if (a == "/idioma" && i + 1 < args.Length) { int n = Array.IndexOf(L.Codigos, args[++i].ToLowerInvariant()); if (n >= 0) L.Actual = n; }
             }
@@ -70,7 +75,8 @@ namespace PreviewVolumeSetup
             if (dir == null) dir = Instalacion.CarpetaInstalada() ?? Instalacion.CarpetaPorDefecto;
             if (silencioso)
             {
-                try { Instalacion.Instalar(dir, escritorio, inicio, null); if (abrir) Process.Start(Path.Combine(dir, Exe)); return 0; }
+                bool b11 = barra11 ?? Instalacion.Barra11Guardada(dir) ?? Instalacion.BarraNueva();
+                try { Instalacion.Instalar(dir, escritorio, inicio, b11, null); if (abrir) Process.Start(Path.Combine(dir, Exe)); return 0; }
                 catch (Exception ex) { Console.Error.WriteLine(ex.Message); return 1; }
             }
             Application.Run(new VentanaInstalar(dir));
@@ -126,7 +132,31 @@ namespace PreviewVolumeSetup
             }
         }
 
-        public static void Instalar(string dir, bool escritorio, bool inicio, Action<string, int> progreso)
+        [DllImport("user32", CharSet = CharSet.Unicode)] static extern IntPtr FindWindow(string clase, string titulo);
+
+        // La barra clasica (Windows 10, ExplorerPatcher) crea ventanas TaskListThumbnailWnd; la de Windows 11 no.
+        public static bool BarraNueva()
+        {
+            if (FindWindow("TaskListThumbnailWnd", null) != IntPtr.Zero) return false;
+            return Environment.OSVersion.Version.Build >= 22000;
+        }
+
+        // Barra elegida en la instalacion anterior (null si no hay o no lo dice).
+        public static bool? Barra11Guardada(string dir)
+        {
+            try
+            {
+                foreach (var l in File.ReadAllLines(Path.Combine(dir, "config.ini")))
+                {
+                    if (l.Trim() == "barra=10") return false;
+                    if (l.Trim() == "barra=11") return true;
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        public static void Instalar(string dir, bool escritorio, bool inicio, bool barra11, Action<string, int> progreso)
         {
             Action<string, int> P = (t, n) => { if (progreso != null) progreso(t, n); };
             P(L.T("Preparando la carpeta…"), 5);
@@ -145,7 +175,12 @@ namespace PreviewVolumeSetup
             }
             // con config.ini presente el programa no toca el arranque con Windows: lo decide el instalador
             string cfg = Path.Combine(dir, "config.ini");
-            if (!File.Exists(cfg)) File.WriteAllText(cfg, "todas=0\r\n");
+            // Se conservan las demas opciones; la barra (Windows 10 / 11) es la elegida ahora.
+            var lineas = new List<string>();
+            if (File.Exists(cfg)) foreach (var l in File.ReadAllLines(cfg)) if (!l.Trim().StartsWith("barra=")) lineas.Add(l);
+            if (!lineas.Exists(l => l.Trim().StartsWith("todas="))) lineas.Insert(0, "todas=0");
+            lineas.Add("barra=" + (barra11 ? "11" : "10"));
+            File.WriteAllText(cfg, string.Join("\r\n", lineas) + "\r\n");
 
             P(L.T("Creando el desinstalador…"), 45);
             string desinst = Path.Combine(dir, "Desinstalar.exe");
@@ -287,8 +322,8 @@ namespace PreviewVolumeSetup
         TextBox carpeta;
         CheckBox escritorio, inicio, abrir;
         ProgressBar barra;
-        Label aviso, estado, etiquetaIdioma;
-        ComboBox idioma;
+        Label aviso, estado, etiquetaIdioma, etiquetaBarra;
+        ComboBox idioma, tipoBarra;
         Button instalar, cancelar, examinar;
         readonly bool actualizar;
         bool terminado, ocupado;
@@ -315,7 +350,13 @@ namespace PreviewVolumeSetup
             idioma.Items.AddRange(L.Nombres);
             idioma.SelectedIndex = L.Actual;
             idioma.SelectedIndexChanged += (s, e) => { L.Actual = idioma.SelectedIndex; Textos(); };
-            Controls.AddRange(new Control[] { aviso, carpeta, examinar, inicio, escritorio, abrir, barra, estado, etiquetaIdioma, idioma });
+            // Barra de tareas: Windows 10 (o Windows 11 con ExplorerPatcher) usa la miniatura clasica; Windows 11 el boton.
+            etiquetaBarra = new Label { Location = new Point(S(330), S(188)), AutoSize = true };
+            tipoBarra = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(S(330), S(212)), Width = S(206) };
+            tipoBarra.Items.AddRange(new object[] { "", "" });
+            bool? guardada = actualizar ? Instalacion.Barra11Guardada(dir) : null;
+            tipoBarra.SelectedIndex = (guardada ?? Instalacion.BarraNueva()) ? 1 : 0;
+            Controls.AddRange(new Control[] { aviso, carpeta, examinar, inicio, escritorio, abrir, etiquetaBarra, tipoBarra, barra, estado, etiquetaIdioma, idioma });
             instalar = Boton("", 308, 334, true);
             cancelar = Boton("", 426, 334, false);
             instalar.Click += (s, e) => Instalar();
@@ -335,6 +376,9 @@ namespace PreviewVolumeSetup
             escritorio.Text = L.T("Crear acceso directo en el escritorio");
             abrir.Text = L.F("Abrir {0} al terminar", Programa.Nombre);
             etiquetaIdioma.Text = L.T("Idioma");
+            etiquetaBarra.Text = L.T("Barra de tareas:");
+            tipoBarra.Items[0] = L.T("Windows 10 (o ExplorerPatcher)");
+            tipoBarra.Items[1] = "Windows 11";
             instalar.Text = terminado ? L.T("Finalizar") : actualizar ? L.T("Actualizar") : L.T("Instalar");
             cancelar.Text = L.T("Cancelar");
             if (terminado) estado.Text = L.T("Instalado. Está junto al reloj: pasa el ratón por el icono de Spotify.");
@@ -352,15 +396,15 @@ namespace PreviewVolumeSetup
             string dir = carpeta.Text.Trim();
             if (dir.Length < 4) { MessageBox.Show(this, L.T("Elige una carpeta válida."), Text); return; }
             ocupado = true;
-            instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = idioma.Enabled = false;
+            instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = idioma.Enabled = tipoBarra.Enabled = false;
             barra.Visible = true;
-            bool esc = escritorio.Checked, ini = inicio.Checked;
+            bool esc = escritorio.Checked, ini = inicio.Checked, b11 = tipoBarra.SelectedIndex == 1;
             var hilo = new Thread(() =>
             {
                 string error = null;
                 try
                 {
-                    Instalacion.Instalar(dir, esc, ini, (t, n) => BeginInvoke((Action)(() => { estado.Text = t; barra.Value = n; })));
+                    Instalacion.Instalar(dir, esc, ini, b11, (t, n) => BeginInvoke((Action)(() => { estado.Text = t; barra.Value = n; })));
                 }
                 catch (UnauthorizedAccessException) { error = L.T("No hay permiso para escribir en esa carpeta. Elige otra (por ejemplo, la propuesta)."); }
                 catch (Exception ex) { error = ex.Message; }
@@ -370,7 +414,7 @@ namespace PreviewVolumeSetup
                     if (error != null)
                     {
                         MessageBox.Show(this, L.T("No se pudo instalar:") + "\n\n" + error, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = idioma.Enabled = true;
+                        instalar.Enabled = cancelar.Enabled = examinar.Enabled = carpeta.Enabled = idioma.Enabled = tipoBarra.Enabled = true;
                         barra.Visible = false; estado.Text = "";
                         return;
                     }

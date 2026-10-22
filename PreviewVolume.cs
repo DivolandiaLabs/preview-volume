@@ -13,13 +13,14 @@ using System.Threading;
 using System.Windows.Forms;
 using Accessibility;
 using Microsoft.Win32;
+using System.Windows.Automation;
 
 [assembly: System.Reflection.AssemblyTitle("Preview Volume")]
 [assembly: System.Reflection.AssemblyProduct("Preview Volume")]
 [assembly: System.Reflection.AssemblyCompany("Divolandia Labs")]
 [assembly: System.Reflection.AssemblyCopyright("© 2026 Divolandia Labs")]
-[assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.2.0.0")]
 
 namespace PreviewVolume
 {
@@ -93,7 +94,7 @@ namespace PreviewVolume
     // ---------------------------------------------------------------- miniatura de la barra (MSAA)
 
     // Lo que se ve: el marco de la miniatura y los titulos de las ventanas que muestra.
-    class Vista { public IntPtr Hwnd; public W.RECT Marco; public List<string> Titulos = new List<string>(); public string Clave; }
+    class Vista { public IntPtr Hwnd; public W.RECT Marco; public List<string> Titulos = new List<string>(); public string Clave; public string Proceso; }
 
     static class Miniatura
     {
@@ -143,6 +144,48 @@ namespace PreviewVolume
             v.Marco = new W.RECT { L = l, R = r, T = rw.T, B = rw.B };
             v.Clave = l + "|" + r + "|" + rw.T + "|" + string.Join("\n", v.Titulos);
             return v;
+        }
+
+        // Plan B (Windows 11 nuevo): si no hay miniatura clasica, el boton de la barra bajo el raton.
+        // Su nombre empieza por el programa ("Spotify: 1 ventana en ejecucion..."); el panel va encima del boton.
+        static DateTime ultimaBusqueda = DateTime.MinValue;
+        static Vista ultimoBoton;
+
+        public static Vista Boton(IntPtr barra, W.POINT c)
+        {
+            if ((DateTime.Now - ultimaBusqueda).TotalMilliseconds < 150) return ultimoBoton;
+            ultimaBusqueda = DateTime.Now;
+            ultimoBoton = null;
+            try
+            {
+                // FromPoint no devuelve el boton en la barra de Windows 11: buscamos entre los botones por rectangulo.
+                var tb = AutomationElement.FromHandle(barra);
+                var botones = tb.FindAll(TreeScope.Descendants,
+                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Button));
+                foreach (AutomationElement el in botones)
+                {
+                    var r = el.Current.BoundingRectangle;
+                    if (c.X < r.Left || c.X >= r.Right || c.Y < r.Top || c.Y >= r.Bottom) continue;
+                    string nombre = el.Current.Name ?? "";
+                    int k = nombre.IndexOf(':');
+                    string proceso = (k > 0 ? nombre.Substring(0, k) : nombre).Trim();
+                    if (proceso.Length == 0) break;
+                    // La miniatura nueva no se puede leer y tapa cualquier ventana: estimamos su marco
+                    // (unos 215x198 a 96 ppp contando el hueco hasta la barra, centrada en el boton) y el panel va encima.
+                    float esc = W.GetDpiForWindow(barra) / 96f; if (esc <= 0) esc = 1;
+                    int centro = (int)((r.Left + r.Right) / 2), mitad = (int)(108 * esc);
+                    ultimoBoton = new Vista
+                    {
+                        Hwnd = barra,
+                        Marco = new W.RECT { L = centro - mitad, R = centro + mitad, T = (int)r.Top - (int)(198 * esc), B = (int)r.Top },
+                        Proceso = proceso,
+                        Clave = "boton|" + nombre + "|" + (int)r.Left + "|" + (int)r.Top
+                    };
+                    break;
+                }
+            }
+            catch { ultimoBoton = null; }
+            return ultimoBoton;
         }
 
         // Procesos duenos de las ventanas con esos titulos.
@@ -282,6 +325,17 @@ namespace PreviewVolume
                 var ns = NombresDe(pid);
                 if (ns.Length > 0) exes.Add(ns[0]);
             }
+            return Sesiones(exes, todas);
+        }
+
+        // Mismo criterio, pero con el nombre del proceso que da el boton de la barra ("Spotify").
+        public static AppSonido BuscarProceso(string nombre, bool todas)
+        {
+            return Sesiones(new HashSet<string>(new[] { nombre }, StringComparer.OrdinalIgnoreCase), todas);
+        }
+
+        static AppSonido Sesiones(HashSet<string> exes, bool todas)
+        {
             if (exes.Count == 0) return null;
             if (!todas && !exes.Contains("spotify")) return null;
 
@@ -337,6 +391,16 @@ namespace PreviewVolume
     class Config
     {
         public bool Todas;
+        // Barra de Windows 11 (miniatura que no se puede leer: se usa el boton). Con la de Windows 10
+        // (o ExplorerPatcher) solo la miniatura clasica. Sin "barra=" en el ini se mira la barra que hay.
+        public bool Barra11 = BarraNueva();
+
+        // La barra clasica (Windows 10, ExplorerPatcher) crea ventanas TaskListThumbnailWnd; la de Windows 11 no.
+        public static bool BarraNueva()
+        {
+            if (W.FindWindow("TaskListThumbnailWnd", null) != IntPtr.Zero) return false;
+            return Environment.OSVersion.Version.Build >= 22000;
+        }
         static string Ruta { get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"); } }
 
         public static Config Leer()
@@ -345,7 +409,12 @@ namespace PreviewVolume
             try
             {
                 foreach (var l in File.ReadAllLines(Ruta))
-                    if (l.Trim() == "todas=1") c.Todas = true;
+                {
+                    string t = l.Trim();
+                    if (t == "todas=1") c.Todas = true;
+                    else if (t == "barra=10") c.Barra11 = false;
+                    else if (t == "barra=11") c.Barra11 = true;
+                }
             }
             catch { }
             return c;
@@ -353,7 +422,7 @@ namespace PreviewVolume
 
         public void Guardar()
         {
-            try { File.WriteAllText(Ruta, "todas=" + (Todas ? "1" : "0") + "\r\n"); } catch { }
+            try { File.WriteAllText(Ruta, "todas=" + (Todas ? "1" : "0") + "\r\nbarra=" + (Barra11 ? "11" : "10") + "\r\n"); } catch { }
         }
 
         const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -557,6 +626,7 @@ namespace PreviewVolume
         volatile bool activo;      // panel a la vista (lo lee el gancho del raton)
         string clave;              // miniatura que se esta mostrando (marco + titulos)
         bool conSonido;            // esa miniatura es de una app con sonido
+        bool modoBoton;            // colocado por el boton de la barra (Windows 11 sin miniatura legible)
         DateTime ultimaLectura, fuera = DateTime.MaxValue;
 
         public Contexto()
@@ -577,11 +647,14 @@ namespace PreviewVolume
             var menu = new ContextMenuStrip();
             var todas = new ToolStripMenuItem("Mostrar en todas las apps con sonido") { Checked = cfg.Todas };
             todas.Click += (s, e) => { cfg.Todas = !cfg.Todas; todas.Checked = cfg.Todas; cfg.Guardar(); };
+            var barra11 = new ToolStripMenuItem("Barra de tareas de Windows 11") { Checked = cfg.Barra11 };
+            barra11.Click += (s, e) => { cfg.Barra11 = !cfg.Barra11; barra11.Checked = cfg.Barra11; cfg.Guardar(); Ocultar(); clave = null; };
             var inicio = new ToolStripMenuItem("Iniciar con Windows") { Checked = Config.Autoarranque };
             inicio.Click += (s, e) => { try { Config.Autoarranque = !Config.Autoarranque; } catch { } inicio.Checked = Config.Autoarranque; };
             menu.Items.Add(new ToolStripMenuItem("Preview Volume") { Enabled = false });
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add(todas);
+            menu.Items.Add(barra11);
             menu.Items.Add(inicio);
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add("Salir", null, (s, e) => ExitThread());
@@ -600,6 +673,17 @@ namespace PreviewVolume
 
             IntPtr h = Miniatura.Visible();
             Vista v = h != IntPtr.Zero ? Miniatura.Leer(h) : null;
+            if (v == null && cfg.Barra11)
+            {
+                // Sin miniatura clasica: el boton de la barra bajo el raton (la barra es la ventana de referencia).
+                IntPtr barra = W.FindWindow("Shell_TrayWnd", null);
+                W.RECT rb;
+                if (barra != IntPtr.Zero && W.GetWindowRect(barra, out rb) && W.Dentro(rb, c.X, c.Y))
+                {
+                    v = Miniatura.Boton(barra, c);
+                    h = barra;
+                }
+            }
 
             if (v != null)
             {
@@ -623,8 +707,10 @@ namespace PreviewVolume
                 // El hueco entre panel y miniatura cuenta como dentro, asi basta un margen minimo.
                 var puente = new W.RECT { L = Math.Min(rPanel.L, rMini.L), R = Math.Max(rPanel.R, rMini.R),
                                           T = Math.Min(rPanel.T, rMini.T), B = Math.Max(rPanel.B, rMini.B) };
+                // Con el boton (miniatura estimada) no hay ventana que mirar: el puente cuenta aunque v sea null.
                 bool dentro = panel.Arrastrando || W.Dentro(rPanel, c.X, c.Y)
-                    || (v != null && (W.Dentro(puente, c.X, c.Y) || W.Dentro(rBarra, c.X, c.Y)));
+                    || ((v != null || modoBoton) && W.Dentro(puente, c.X, c.Y))
+                    || (v != null && W.Dentro(rBarra, c.X, c.Y));
                 if (dentro) fuera = DateTime.MaxValue;
                 else if (fuera == DateTime.MaxValue) fuera = DateTime.Now;
                 else if ((DateTime.Now - fuera).TotalMilliseconds >= 60) Ocultar();
@@ -640,10 +726,11 @@ namespace PreviewVolume
         bool Mostrar(Vista v, IntPtr h)
         {
             if (panel.App != null) { panel.App.Soltar(); panel.App = null; }
-            panel.App = Sonido.Buscar(v.Titulos, cfg.Todas);
+            panel.App = v.Proceso != null ? Sonido.BuscarProceso(v.Proceso, cfg.Todas) : Sonido.Buscar(v.Titulos, cfg.Todas);
             if (panel.App == null) return false;
             miniatura = h;
             rMini = v.Marco;
+            modoBoton = v.Proceso != null;
             float esc = W.GetDpiForWindow(h) / 96f;
             if (esc <= 0) esc = 1;
             panel.Colocar(rMini, esc);
