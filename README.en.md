@@ -25,6 +25,7 @@ It is a tiny program (about 40 KB) that sits next to the clock, never goes onlin
 - **"Show for all apps with sound"** option: Chrome, Brave, media players… (Spotify only by default).
 - System tray icon with optional **start with Windows**.
 - Works with multiple monitors and any display scaling (100 %, 150 %, 200 %…).
+- **Classic or Windows 11 taskbar**: with the Windows 10 style taskbar (or Windows 11 with ExplorerPatcher) the bar sits right on the preview; with the new Windows 11 taskbar it is placed above it based on the taskbar button. You choose it during setup or from the tray icon menu.
 
 ![Volume bar](docs/screenshots/barra.png)
 ![Muted](docs/screenshots/barra-silencio.png)
@@ -33,7 +34,7 @@ It is a tiny program (about 40 KB) that sits next to the clock, never goes onlin
 
 1. Download **`PreviewVolume-Setup.exe`** from the [releases page](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
 2. Run it and click **Install**. The installer opens in your Windows language and can be switched at the bottom left (10 languages). It installs for your user only, in `%LOCALAPPDATA%\Programs\Preview Volume`, with no administrator rights needed.
-3. Choose whether it should start with Windows and whether you want a desktop shortcut.
+3. Choose whether it should start with Windows, whether you want a desktop shortcut, and which **taskbar** you use: Windows 10 (or ExplorerPatcher) or Windows 11. The installer suggests the one it detects.
 
 ![Installer](docs/screenshots/instalador.png)
 
@@ -41,7 +42,7 @@ The program is not code-signed, so the first time Windows SmartScreen may warn y
 
 To uninstall: **Settings → Apps → Installed apps → Preview Volume → Uninstall**.
 
-Silent install: `PreviewVolume-Setup.exe /silencioso` (options: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma en`).
+Silent install: `PreviewVolume-Setup.exe /silencioso` (options: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma en`, `/barra10`, `/barra11`).
 
 ## Usage
 
@@ -53,7 +54,7 @@ Silent install: `PreviewVolume-Setup.exe /silencioso` (options: `/dir "folder"`,
 ## Requirements
 
 - Windows 10 or 11 with .NET Framework 4.8 (already part of Windows).
-- Tested on Windows 11 with the classic taskbar (Windows 10 style, e.g. with ExplorerPatcher). The preview of the new Windows 11 taskbar may behave differently.
+- Works with the classic taskbar (Windows 10, or Windows 11 with ExplorerPatcher) and with the new Windows 11 taskbar. On the new one Windows does not expose the preview, so the bar's position is approximate; on the classic one it sits exactly on the preview.
 - The installer comes in 10 languages; the bar and the program menu are in Spanish.
 
 ## Building from source

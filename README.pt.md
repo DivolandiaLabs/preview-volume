@@ -25,6 +25,7 @@ O Windows só deixa o próprio aplicativo colocar botões na sua pré-visualiza�
 - Opção **«Mostrar em todos os apps com som»**: Chrome, Brave, players… (por padrão, só o Spotify).
 - Ícone na bandeja do sistema com **iniciar com o Windows** opcional.
 - Funciona com vários monitores e qualquer escala de tela (100 %, 150 %, 200 %…).
+- **Barra clássica ou do Windows 11**: com a barra estilo Windows 10 (ou Windows 11 com o ExplorerPatcher) a barra fica colada à pré-visualização; com a nova barra do Windows 11 ela é posicionada acima, a partir do botão da barra de tarefas. Escolha na instalação ou no menu do ícone.
 
 ![Barra de volume](docs/screenshots/barra.png)
 ![Sem som](docs/screenshots/barra-silencio.png)
@@ -33,7 +34,7 @@ O Windows só deixa o próprio aplicativo colocar botões na sua pré-visualiza�
 
 1. Baixe **`PreviewVolume-Setup.exe`** na [página de versões](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
 2. Abra e clique em **Instalar**. O instalador abre no idioma do Windows e pode ser trocado no canto inferior esquerdo (10 idiomas). A instalação é só para o seu usuário, em `%LOCALAPPDATA%\Programs\Preview Volume`, sem pedir permissão de administrador.
-3. Escolha se ele deve iniciar com o Windows e se você quer um atalho na área de trabalho.
+3. Escolha se ele deve iniciar com o Windows, se você quer um atalho na área de trabalho e qual **barra de tarefas** usa: Windows 10 (ou ExplorerPatcher) ou Windows 11. O instalador sugere a que detecta.
 
 ![Instalador](docs/screenshots/instalador.png)
 
@@ -41,7 +42,7 @@ O programa não é assinado digitalmente, então na primeira vez o Windows Smart
 
 Para desinstalar: **Configurações → Aplicativos → Aplicativos instalados → Preview Volume → Desinstalar**.
 
-Instalação silenciosa: `PreviewVolume-Setup.exe /silencioso` (opções: `/dir "pasta"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma pt`).
+Instalação silenciosa: `PreviewVolume-Setup.exe /silencioso` (opções: `/dir "pasta"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma pt`, `/barra10`, `/barra11`).
 
 ## Uso
 
@@ -53,7 +54,7 @@ Instalação silenciosa: `PreviewVolume-Setup.exe /silencioso` (opções: `/dir 
 ## Requisitos
 
 - Windows 10 ou 11 com .NET Framework 4.8 (já vem com o Windows).
-- Testado no Windows 11 com a barra de tarefas clássica (estilo Windows 10, por exemplo com o ExplorerPatcher). A pré-visualização da nova barra do Windows 11 pode funcionar de outra forma.
+- Funciona com a barra clássica (Windows 10, ou Windows 11 com o ExplorerPatcher) e com a nova barra do Windows 11. Na nova, o Windows não permite ler a pré-visualização, então a posição da barra é aproximada; na clássica fica colada exatamente.
 - O instalador está em 10 idiomas; a barra e o menu do programa estão em espanhol.
 
 ## Compilar a partir do código

@@ -25,6 +25,7 @@ To malutki program (ok. 40 KB), który siedzi obok zegara, nigdy nie łączy si�
 - Opcja **„Pokazuj dla wszystkich aplikacji z dźwiękiem”**: Chrome, Brave, odtwarzacze… (domyślnie tylko Spotify).
 - Ikona w zasobniku systemowym z opcjonalnym **uruchamianiem z Windows**.
 - Działa z wieloma monitorami i każdym skalowaniem ekranu (100 %, 150 %, 200 %…).
+- **Klasyczny pasek lub pasek Windows 11**: przy pasku w stylu Windows 10 (lub Windows 11 z ExplorerPatcher) suwak przylega do podglądu; przy nowym pasku Windows 11 jest umieszczany nad nim na podstawie przycisku na pasku zadań. Wybór przy instalacji lub w menu ikony.
 
 ![Pasek głośności](docs/screenshots/barra.png)
 ![Wyciszony](docs/screenshots/barra-silencio.png)
@@ -33,7 +34,7 @@ To malutki program (ok. 40 KB), który siedzi obok zegara, nigdy nie łączy si�
 
 1. Pobierz **`PreviewVolume-Setup.exe`** ze [strony wydań](https://github.com/DivolandiaLabs/preview-volume/releases/latest).
 2. Uruchom go i kliknij **Instaluj**. Instalator otwiera się w języku Windows, a język można zmienić w lewym dolnym rogu (10 języków). Instaluje się tylko dla Twojego użytkownika, w `%LOCALAPPDATA%\Programs\Preview Volume`, bez uprawnień administratora.
-3. Wybierz, czy ma się uruchamiać z Windows i czy chcesz skrót na pulpicie.
+3. Wybierz, czy ma się uruchamiać z Windows, czy chcesz skrót na pulpicie i jakiego **paska zadań** używasz: Windows 10 (lub ExplorerPatcher) czy Windows 11. Instalator proponuje wykryty.
 
 ![Instalator](docs/screenshots/instalador.png)
 
@@ -41,7 +42,7 @@ Program nie jest podpisany cyfrowo, więc przy pierwszym uruchomieniu Windows Sm
 
 Odinstalowanie: **Ustawienia → Aplikacje → Zainstalowane aplikacje → Preview Volume → Odinstaluj**.
 
-Instalacja cicha: `PreviewVolume-Setup.exe /silencioso` (opcje: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma pl`).
+Instalacja cicha: `PreviewVolume-Setup.exe /silencioso` (opcje: `/dir "folder"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma pl`, `/barra10`, `/barra11`).
 
 ## Użycie
 
@@ -53,7 +54,7 @@ Instalacja cicha: `PreviewVolume-Setup.exe /silencioso` (opcje: `/dir "folder"`,
 ## Wymagania
 
 - Windows 10 lub 11 z .NET Framework 4.8 (jest już w systemie).
-- Przetestowano w Windows 11 z klasycznym paskiem zadań (w stylu Windows 10, np. z ExplorerPatcher). Podgląd nowego paska Windows 11 może działać inaczej.
+- Działa z klasycznym paskiem (Windows 10 lub Windows 11 z ExplorerPatcher) i z nowym paskiem Windows 11. W nowym Windows nie pozwala odczytać podglądu, więc położenie suwaka jest przybliżone; w klasycznym przylega dokładnie.
 - Instalator jest dostępny w 10 językach; pasek i menu programu są po hiszpańsku.
 
 ## Kompilacja ze źródeł

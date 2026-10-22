@@ -25,6 +25,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 - **「音が出るすべてのアプリで表示」**オプション：Chrome、Brave、各種プレーヤーなど（既定では Spotify のみ）。
 - 通知領域のアイコンと、任意の **Windows 起動時に開始**。
 - 複数モニターと、あらゆる表示スケール（100 %、150 %、200 % など）に対応。
+- **クラシックまたは Windows 11 のタスクバー**：Windows 10 スタイルのタスクバー（または ExplorerPatcher を使った Windows 11）ではプレビューにぴったり付き、新しい Windows 11 のタスクバーではタスクバーのボタンを基準にプレビューの上に表示されます。インストール時かアイコンのメニューで選べます。
 
 ![音量バー](docs/screenshots/barra.png)
 ![ミュート](docs/screenshots/barra-silencio.png)
@@ -33,7 +34,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 
 1. [リリースページ](https://github.com/DivolandiaLabs/preview-volume/releases/latest)から **`PreviewVolume-Setup.exe`** をダウンロードします。
 2. 起動して **インストール** を押します。インストーラーは Windows の言語で開き、左下で切り替えられます（10 言語）。現在のユーザーだけに `%LOCALAPPDATA%\Programs\Preview Volume` へインストールされ、管理者権限は不要です。
-3. Windows と一緒に起動するか、デスクトップにショートカットを作るかを選びます。
+3. Windows と一緒に起動するか、デスクトップにショートカットを作るか、使っている**タスクバー**（Windows 10 または ExplorerPatcher / Windows 11）を選びます。インストーラーが検出したものを提案します。
 
 ![インストーラー](docs/screenshots/instalador.png)
 
@@ -41,7 +42,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 
 アンインストール：**設定 → アプリ → インストールされているアプリ → Preview Volume → アンインストール**。
 
-サイレントインストール：`PreviewVolume-Setup.exe /silencioso`（オプション：`/dir "フォルダー"`、`/escritorio`、`/sininicio`、`/abrir`、`/idioma ja`）。
+サイレントインストール：`PreviewVolume-Setup.exe /silencioso`（オプション：`/dir "フォルダー"`、`/escritorio`、`/sininicio`、`/abrir`、`/idioma ja`、`/barra10`、`/barra11`）。
 
 ## 使い方
 
@@ -53,7 +54,7 @@ Windows では、プレビューにボタンを置けるのはそのアプリ自
 ## 動作環境
 
 - .NET Framework 4.8 を含む Windows 10 または 11（Windows に標準搭載）。
-- Windows 11 のクラシックなタスクバー（Windows 10 スタイル、例：ExplorerPatcher 使用時）で動作確認済み。Windows 11 の新しいタスクバーのプレビューでは動作が異なる場合があります。
+- クラシックなタスクバー（Windows 10、または ExplorerPatcher を使った Windows 11）と新しい Windows 11 のタスクバーの両方で動作します。新しいタスクバーではプレビューを読み取れないため位置はおおよそで、クラシックでは正確に付きます。
 - インストーラーは 10 言語に対応。音量バーとプログラムのメニューはスペイン語です。
 
 ## ソースからのビルド

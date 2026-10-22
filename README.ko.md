@@ -25,6 +25,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 - **「소리가 나는 모든 앱에 표시」** 옵션: Chrome, Brave, 플레이어 등(기본값은 Spotify만).
 - 시스템 트레이 아이콘과 선택 가능한 **Windows 시작 시 실행**.
 - 여러 모니터와 모든 화면 배율(100%, 150%, 200% 등)에서 동작합니다.
+- **클래식 또는 Windows 11 작업 표시줄**: Windows 10 스타일 작업 표시줄(또는 ExplorerPatcher를 쓰는 Windows 11)에서는 미리 보기에 딱 붙고, 새 Windows 11 작업 표시줄에서는 작업 표시줄 버튼을 기준으로 미리 보기 위에 배치됩니다. 설치할 때나 아이콘 메뉴에서 선택합니다.
 
 ![볼륨 바](docs/screenshots/barra.png)
 ![음소거](docs/screenshots/barra-silencio.png)
@@ -33,7 +34,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 
 1. [릴리스 페이지](https://github.com/DivolandiaLabs/preview-volume/releases/latest)에서 **`PreviewVolume-Setup.exe`**를 내려받습니다.
 2. 실행한 뒤 **설치**를 누릅니다. 설치 프로그램은 Windows 언어로 열리며 왼쪽 아래에서 바꿀 수 있습니다(10개 언어). 현재 사용자에게만 `%LOCALAPPDATA%\Programs\Preview Volume`에 설치되며 관리자 권한이 필요 없습니다.
-3. Windows와 함께 시작할지, 바탕 화면 바로 가기를 만들지 선택합니다.
+3. Windows와 함께 시작할지, 바탕 화면 바로 가기를 만들지, 어떤 **작업 표시줄**을 쓰는지(Windows 10 또는 ExplorerPatcher / Windows 11) 선택합니다. 설치 프로그램이 감지한 것을 제안합니다.
 
 ![설치 프로그램](docs/screenshots/instalador.png)
 
@@ -41,7 +42,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 
 제거: **설정 → 앱 → 설치된 앱 → Preview Volume → 제거**.
 
-자동 설치: `PreviewVolume-Setup.exe /silencioso` (옵션: `/dir "폴더"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma ko`).
+자동 설치: `PreviewVolume-Setup.exe /silencioso` (옵션: `/dir "폴더"`, `/escritorio`, `/sininicio`, `/abrir`, `/idioma ko`, `/barra10`, `/barra11`).
 
 ## 사용법
 
@@ -53,7 +54,7 @@ Windows는 앱 자신만 미리 보기에 버튼을 넣을 수 있게 하는데,
 ## 요구 사항
 
 - .NET Framework 4.8이 포함된 Windows 10 또는 11(Windows에 기본 포함).
-- Windows 11의 클래식 작업 표시줄(Windows 10 스타일, 예: ExplorerPatcher 사용)에서 테스트했습니다. 새 Windows 11 작업 표시줄의 미리 보기는 다르게 동작할 수 있습니다.
+- 클래식 작업 표시줄(Windows 10, 또는 ExplorerPatcher를 쓰는 Windows 11)과 새 Windows 11 작업 표시줄 모두에서 동작합니다. 새 작업 표시줄에서는 Windows가 미리 보기를 읽을 수 없게 하므로 위치가 대략적이고, 클래식에서는 정확히 붙습니다.
 - 설치 프로그램은 10개 언어를 지원하며, 볼륨 바와 프로그램 메뉴는 스페인어입니다.
 
 ## 소스에서 빌드
